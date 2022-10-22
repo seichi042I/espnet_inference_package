@@ -7,7 +7,7 @@ from typing import Optional
 from typing import Union
 import warnings
 
-import g2p_en
+# import g2p_en
 import jamo
 from typeguard import check_argument_types
 
