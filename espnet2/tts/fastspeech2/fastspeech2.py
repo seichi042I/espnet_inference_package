@@ -662,14 +662,14 @@ class FastSpeech2(AbsTTS):
 
         if is_inference:
             if ds is not None:
-                d_outs = ds.unsqueeze()
+                d_outs = ds.unsqueeze(0)
             else:
                 d_outs = self.duration_predictor.inference(hs, d_masks)  # (B, T_text)
             # use prediction in inference
             if ps is not None:
-                p_outs = ps.unsqueeze()
+                p_outs = ps.unsqueeze(0)
             if es is not None:
-                e_outs = es.unsqueeze()
+                e_outs = es.unsqueeze(0)
             p_embs = self.pitch_embed(p_outs.transpose(1, 2)).transpose(1, 2)
             e_embs = self.energy_embed(e_outs.transpose(1, 2)).transpose(1, 2)
             hs = hs + e_embs + p_embs
