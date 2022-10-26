@@ -703,7 +703,7 @@ class JETSGenerator(torch.nn.Module):
             p_outs = self.pitch_predictor(hs, h_masks.unsqueeze(-1)) if pitch is None else pitch.unsqueeze(0)
             e_outs = self.energy_predictor(hs, h_masks.unsqueeze(-1)) if energy is None else energy.unsqueeze(0)
             d_outs = self.duration_predictor.inference(hs, h_masks) if duration is None else duration.unsqueeze(0)
-            print(f'p_outs: {p_outs.shape()} , d_outs: {d_outs.shape()}')
+            print(f'p_outs: {p_outs.shape} , d_outs: {d_outs.shape}')
 
         p_embs = self.pitch_embed(p_outs.transpose(1, 2)).transpose(1, 2)
         e_embs = self.energy_embed(e_outs.transpose(1, 2)).transpose(1, 2)
