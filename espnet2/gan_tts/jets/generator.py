@@ -702,7 +702,7 @@ class JETSGenerator(torch.nn.Module):
             # forward duration predictor and variance predictors
             p_outs = self.pitch_predictor(hs, h_masks.unsqueeze(-1)) if pitch is None else pitch.unsqueeze(1)
             e_outs = self.energy_predictor(hs, h_masks.unsqueeze(-1)) if energy is None else energy.unsqueeze(1)
-            d_outs = self.duration_predictor.inference(hs, h_masks) if duration is None else duration.unsqueeze(1)
+            d_outs = self.duration_predictor.inference(hs, h_masks) if duration is None else duration.unsqueeze(0)
 
         p_embs = self.pitch_embed(p_outs.transpose(1, 2)).transpose(1, 2)
         e_embs = self.energy_embed(e_outs.transpose(1, 2)).transpose(1, 2)
