@@ -588,6 +588,7 @@ class JETS(AbsGANTTS):
         self,
         text: torch.Tensor,
         feats: Optional[torch.Tensor] = None,
+        duration: Optional[torch.Tensor] = None,
         pitch: Optional[torch.Tensor] = None,
         energy: Optional[torch.Tensor] = None,
         use_teacher_forcing: bool = False,
@@ -632,20 +633,24 @@ class JETS(AbsGANTTS):
             assert energy is not None
             energy = energy[None]
 
-            wav, dur = self.generator.inference(
+            wav, dur, pitch, energy= self.generator.inference(
                 text=text,
                 text_lengths=text_lengths,
                 feats=feats,
                 feats_lengths=feats_lengths,
+                duration=duration,
                 pitch=pitch,
                 energy=energy,
                 use_teacher_forcing=use_teacher_forcing,
                 **kwargs,
             )
         else:
-            wav, dur = self.generator.inference(
+            wav, dur, pitch, energy = self.generator.inference(
                 text=text,
                 text_lengths=text_lengths,
+                duration=duration,
+                pitch=pitch,
+                energy=energy,
                 **kwargs,
             )
-        return dict(wav=wav.view(-1), duration=dur[0])
+        return dict(wav=wav.view(-1), duration=dur[0], pitch=pitch[0], energy=energy[0])

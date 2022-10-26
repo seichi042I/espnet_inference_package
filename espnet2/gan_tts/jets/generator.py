@@ -639,6 +639,7 @@ class JETSGenerator(torch.nn.Module):
         text_lengths: torch.Tensor,
         feats: Optional[torch.Tensor] = None,
         feats_lengths: Optional[torch.Tensor] = None,
+        duration:Optional[torch.Tensor] = None,
         pitch: Optional[torch.Tensor] = None,
         energy: Optional[torch.Tensor] = None,
         sids: Optional[torch.Tensor] = None,
@@ -699,9 +700,9 @@ class JETSGenerator(torch.nn.Module):
             ).unsqueeze(-1)
         else:
             # forward duration predictor and variance predictors
-            p_outs = self.pitch_predictor(hs, h_masks.unsqueeze(-1))
-            e_outs = self.energy_predictor(hs, h_masks.unsqueeze(-1))
-            d_outs = self.duration_predictor.inference(hs, h_masks)
+            p_outs = self.pitch_predictor(hs, h_masks.unsqueeze(-1)) if pitch is None else pitch.unsqueeze(1)
+            e_outs = self.energy_predictor(hs, h_masks.unsqueeze(-1)) if pitch is None else energy.unsqueeze(1)
+            d_outs = self.duration_predictor.inference(hs, h_masks) if pitch is None else duration.unsqueeze(1)
 
         p_embs = self.pitch_embed(p_outs.transpose(1, 2)).transpose(1, 2)
         e_embs = self.energy_embed(e_outs.transpose(1, 2)).transpose(1, 2)
@@ -725,7 +726,7 @@ class JETSGenerator(torch.nn.Module):
         # forward generator
         wav = self.generator(zs.transpose(1, 2))
 
-        return wav.squeeze(1), d_outs
+        return wav.squeeze(1), d_outs,p_outs,e_outs
 
     def _integrate_with_spk_embed(
         self, hs: torch.Tensor, spembs: torch.Tensor
