@@ -4,30 +4,11 @@
 """Fastspeech2 related modules for ESPnet2."""
 
 import logging
-
-from typing import Dict
-from typing import Optional
-from typing import Sequence
-from typing import Tuple
+from typing import Dict, Optional, Sequence, Tuple
 
 import torch
 import torch.nn.functional as F
-
 from typeguard import check_argument_types
-
-from espnet.nets.pytorch_backend.conformer.encoder import (
-    Encoder as ConformerEncoder,  # noqa: H301
-)
-from espnet.nets.pytorch_backend.fastspeech.duration_predictor import DurationPredictor
-from espnet.nets.pytorch_backend.fastspeech.length_regulator import LengthRegulator
-from espnet.nets.pytorch_backend.nets_utils import make_non_pad_mask
-from espnet.nets.pytorch_backend.nets_utils import make_pad_mask
-from espnet.nets.pytorch_backend.tacotron2.decoder import Postnet
-from espnet.nets.pytorch_backend.transformer.embedding import PositionalEncoding
-from espnet.nets.pytorch_backend.transformer.embedding import ScaledPositionalEncoding
-from espnet.nets.pytorch_backend.transformer.encoder import (
-    Encoder as TransformerEncoder,  # noqa: H301
-)
 
 from espnet2.torch_utils.device_funcs import force_gatherable
 from espnet2.torch_utils.initialize import initialize
@@ -35,6 +16,18 @@ from espnet2.tts.abs_tts import AbsTTS
 from espnet2.tts.fastspeech2.loss import FastSpeech2Loss
 from espnet2.tts.fastspeech2.variance_predictor import VariancePredictor
 from espnet2.tts.gst.style_encoder import StyleEncoder
+from espnet.nets.pytorch_backend.conformer.encoder import Encoder as ConformerEncoder
+from espnet.nets.pytorch_backend.fastspeech.duration_predictor import DurationPredictor
+from espnet.nets.pytorch_backend.fastspeech.length_regulator import LengthRegulator
+from espnet.nets.pytorch_backend.nets_utils import make_non_pad_mask, make_pad_mask
+from espnet.nets.pytorch_backend.tacotron2.decoder import Postnet
+from espnet.nets.pytorch_backend.transformer.embedding import (
+    PositionalEncoding,
+    ScaledPositionalEncoding,
+)
+from espnet.nets.pytorch_backend.transformer.encoder import (
+    Encoder as TransformerEncoder,
+)
 
 
 class FastSpeech2(AbsTTS):
@@ -662,14 +655,14 @@ class FastSpeech2(AbsTTS):
 
         if is_inference:
             if ds is not None:
-                d_outs = ds.unsqueeze(0)
+                d_outs = ds.unsqueeze()
             else:
                 d_outs = self.duration_predictor.inference(hs, d_masks)  # (B, T_text)
             # use prediction in inference
             if ps is not None:
-                p_outs = ps.unsqueeze(0)
+                p_outs = ps.unsqueeze()
             if es is not None:
-                e_outs = es.unsqueeze(0)
+                e_outs = es.unsqueeze()
             p_embs = self.pitch_embed(p_outs.transpose(1, 2)).transpose(1, 2)
             e_embs = self.energy_embed(e_outs.transpose(1, 2)).transpose(1, 2)
             hs = hs + e_embs + p_embs
