@@ -648,6 +648,7 @@ class JETS(AbsGANTTS):
             wav, dur, pitch, energy = self.generator.inference(
                 text=text,
                 text_lengths=text_lengths,
+                feats=feats,
                 duration=duration,
                 pitch=pitch,
                 energy=energy,
