@@ -4,8 +4,8 @@ import warnings
 from pathlib import Path
 from typing import Iterable, List, Optional, Union
 
-# import g2p_en
-# import jamo
+import g2p_en
+import jamo
 from typeguard import check_argument_types
 
 from espnet2.text.abs_tokenizer import AbsTokenizer
@@ -15,6 +15,7 @@ g2p_choices = [
     "g2p_en",
     "g2p_en_no_space",
     "pyopenjtalk",
+    "pyopenjtalk_myg2p",
     "pyopenjtalk_kana",
     "pyopenjtalk_accent",
     "pyopenjtalk_accent_with_pause",
@@ -54,6 +55,28 @@ def pyopenjtalk_g2p(text) -> List[str]:
     # phones is a str object separated by space
     phones = pyopenjtalk.g2p(text, kana=False)
     phones = phones.split(" ")
+    return phones
+
+
+def pyopenjtalk_g2p_myg2p(text):
+    import pyopenjtalk
+    test = re.sub('\.\.\.', '…', text)
+    test = re.sub('？', '?', test)
+    test = re.sub('！', '!', test)
+    test = re.sub('、', ',', test)
+    test = re.sub('。', '.', test)
+    print(test)
+    buff = []
+    left = 0
+    for i, x in enumerate(test):
+        if '…' in x or '?' in x or '!' in x or ',' in x or '.' in x:
+            if not i == 0 or i - left < 2:
+                buff.extend(pyopenjtalk.g2p(test[left:i], kana=False).split(' '))
+            left = i + 1
+            buff.extend(x)
+    print(buff)
+    # phones is a str object separated by space
+    phones = buff
     return phones
 
 
@@ -407,6 +430,8 @@ class PhonemeTokenizer(AbsTokenizer):
             self.g2p = G2p_en(no_space=True)
         elif g2p_type == "pyopenjtalk":
             self.g2p = pyopenjtalk_g2p
+        elif g2p_type == "pyopenjtalk_myg2p":
+            self.g2p = pyopenjtalk_g2p_myg2p
         elif g2p_type == "pyopenjtalk_kana":
             self.g2p = pyopenjtalk_g2p_kana
         elif g2p_type == "pyopenjtalk_accent":
