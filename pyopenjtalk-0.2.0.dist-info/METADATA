@@ -7,7 +7,6 @@ Author: Ryuichi Yamamoto
 Author-email: zryuichi@gmail.com
 License: MIT
 Keywords: OpenJTalk,Research
-Platform: UNKNOWN
 Classifier: Operating System :: POSIX
 Classifier: Operating System :: Unix
 Classifier: Operating System :: MacOS
@@ -25,25 +24,25 @@ Classifier: Intended Audience :: Science/Research
 Classifier: Intended Audience :: Developers
 Description-Content-Type: text/markdown
 License-File: LICENSE.md
-Requires-Dist: numpy (>=1.8.0)
-Requires-Dist: cython (>=0.21.0)
+Requires-Dist: numpy >=1.8.0
+Requires-Dist: cython >=0.21.0
 Requires-Dist: six
 Requires-Dist: tqdm
 Provides-Extra: docs
 Requires-Dist: sphinx-rtd-theme ; extra == 'docs'
-Requires-Dist: nbsphinx (>=0.8.6) ; extra == 'docs'
-Requires-Dist: Jinja2 (>=3.0.1) ; extra == 'docs'
+Requires-Dist: nbsphinx >=0.8.6 ; extra == 'docs'
+Requires-Dist: Jinja2 >=3.0.1 ; extra == 'docs'
 Requires-Dist: pandoc ; extra == 'docs'
 Requires-Dist: ipython ; extra == 'docs'
 Requires-Dist: jupyter ; extra == 'docs'
 Provides-Extra: lint
 Requires-Dist: pysen ; extra == 'lint'
 Requires-Dist: types-setuptools ; extra == 'lint'
-Requires-Dist: mypy (<=0.910) ; extra == 'lint'
-Requires-Dist: black (<=20.8,>=19.19b0) ; extra == 'lint'
-Requires-Dist: flake8 (<4,>=3.7) ; extra == 'lint'
+Requires-Dist: mypy <=0.910 ; extra == 'lint'
+Requires-Dist: black <=20.8,>=19.19b0 ; extra == 'lint'
+Requires-Dist: flake8 <4,>=3.7 ; extra == 'lint'
 Requires-Dist: flake8-bugbear ; extra == 'lint'
-Requires-Dist: isort (<5.2.0,>=4.3) ; extra == 'lint'
+Requires-Dist: isort <5.2.0,>=4.3 ; extra == 'lint'
 Provides-Extra: test
 Requires-Dist: pytest ; extra == 'test'
 Requires-Dist: scipy ; extra == 'test'
@@ -165,4 +164,3 @@ Out[3]: 'コンニチワ'
 ## Acknowledgements
 
 HTS Working Group for their dedicated efforts to develop and maintain Open JTalk.
-
